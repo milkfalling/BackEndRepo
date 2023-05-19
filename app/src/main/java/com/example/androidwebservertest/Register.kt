@@ -40,30 +40,32 @@ class Register : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        with(binding) {
+        with(binding)
+        {
             btSubmit.setOnClickListener {
                 val userName = viewModel?.userName?.value
                 val password = viewModel?.password?.value
                 val confirmPassword = viewModel?.confirmPassword?.value
                 val nickName = viewModel?.nickName?.value
-                with(check()) {
+                with(check())
+                {
                     when (userNameIsInvalid(userName)) {
-                        "不可為空" -> etUsername.error="不可為空"
-                        "不可少於5" -> etUsername.error= "不可少於5"
-                        "不可多於50" -> etUsername.error="不可多於50"
-                        "只能為英數字" -> etUsername.error="只能為英數字"
+                        "不可為空" -> etUsername.error = "不可為空"
+                        "不可少於5" -> etUsername.error = "不可少於5"
+                        "不可多於50" -> etUsername.error = "不可多於50"
+                        "只能為英數字" -> etUsername.error = "只能為英數字"
                     }
                     when (passwordIsInvalid(password)) {
-                        "不可為空" -> etPassword.error="不可為空"
-                        "不可少於6" -> etPassword.error= "不可少於6"
-                        "不可多於12" -> etPassword.error="不可多於12"
-                        "只能為英數字" -> etPassword.error="只能為英數字"
+                        "不可為空" -> etPassword.error = "不可為空"
+                        "不可少於6" -> etPassword.error = "不可少於6"
+                        "不可多於12" -> etPassword.error = "不可多於12"
+                        "只能為英數字" -> etPassword.error = "只能為英數字"
                     }
                     when (nickNameIsInvalid(nickName)) {
-                        "不可為空" -> etNickname.error="不可為空"
-                        "不可多於20" -> etNickname.error="不可多於20"
+                        "不可為空" -> etNickname.error = "不可為空"
+                        "不可多於20" -> etNickname.error = "不可多於20"
                     }
-                    if(confirmPassword != password){
+                    if (confirmPassword != password) {
                         etConfirmPassword.error = "與密碼不一致"
                         return@setOnClickListener
                     }
@@ -75,6 +77,7 @@ class Register : Fragment() {
                     val password: String?,
                     val nickname: String?
                 )
+
                 val myData = MyData(userName, password, nickName)
                 val gson = Gson()
                 val json = gson.toJson(myData)
@@ -82,9 +85,9 @@ class Register : Fragment() {
                 registerTask(json) { JsonElement ->
                     tvResult.text = JsonElement
                 }
-                btLoginRegister.setOnClickListener {
-                    Navigation.findNavController(it).navigate(R.id.login)
-                }
+            }
+            btLoginRegister.setOnClickListener {
+                Navigation.findNavController(it).navigate(R.id.login)
             }
         }
     }
@@ -109,7 +112,10 @@ class Register : Fragment() {
             if (conn.responseCode == HttpURLConnection.HTTP_OK) {
                 val inputStream = conn.inputStream
                 val response = inputStream.bufferedReader().use { it.readText() }
-                return Gson().fromJson(response, JsonObject::class.java) // 解析服务器响应的 JSON 数据为 JsonArray 对象
+                return Gson().fromJson(
+                    response,
+                    JsonObject::class.java
+                ) // 解析服务器响应的 JSON 数据为 JsonArray 对象
             } else {
                 Log.e("request2", "Response code: ${conn.responseCode}")
             }
